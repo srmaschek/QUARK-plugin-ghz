@@ -6,10 +6,10 @@ build-backend = "setuptools.build_meta"
 # can be empty if no extra settings are needed, presence enables setuptools-scm
 
 [project.urls]
-Homepage = "PLUGIN_HOMEPAGE"
+Homepage = "https://github.com/srmaschek/QUARK-plugin-ghz"
 
 [project]
-name = "PLUGIN_NAME"
+name = "QUARK-plugin-ghz"
 dynamic = ["version"]
 readme = "README.md"
 requires-python = ">=3.12"
