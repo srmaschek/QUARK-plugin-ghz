@@ -63,7 +63,7 @@ class QasmGHZCircuit(Core):
         measurement = "\n".join(
             [f"measure q[{i}] -> c[{i}];" for i in range(n)])
 
-        return Circuit(header + circuit + measurement)
+        return Data(Circuit(header + circuit + measurement))
 
     def postprocess(self, data: SampleDistribution):
         assert isinstance(data, SampleDistribution)
