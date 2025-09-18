@@ -51,6 +51,8 @@ class GHZ(Core):
 
 @dataclass
 class QasmGHZCircuit(Core):
+    measure: bool = False
+
     def preprocess(self, data):
         n: dict = data.data.get("size")
         header = f"""
@@ -60,8 +62,9 @@ class QasmGHZCircuit(Core):
         """
         circuit = "h q[0];" + \
             "\n".join([f"cx q[{i}],q[{i+1}];" for i in range(n-1)])
-        measurement = "\n".join(
+        measurement = "" if not self.measure else "\n".join(
             [f"measure q[{i}] -> c[{i}];" for i in range(n)])
+
 
         return Data(Circuit(header + circuit + measurement))
 

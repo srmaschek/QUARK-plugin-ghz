@@ -1,10 +1,19 @@
 plugins: ["quark_plugin_ghz", "quark_plugin_myqlm"]
 
+nbshots: &nbshots 5000
 
 pipeline: &ghz_pipeline [
-  "GHZ": {"size": 3},
+  [
+    "GHZ": {"size": 3},
+    "GHZ": {"size": 5}
+  ],
   "QasmGHZCircuit",
-  "MyQLMDigitalQPU":{nbshots: 100}
+  [
+    "MyQLMDigitalQPU":{nbshots: *nbshots},
+    "MyQLMDigitalQPU":{nbshots: 0},
+   "MyQLMDigitalQPU": {"qpu_class_name":"PyLinalg", "nbshots": *nbshots},
+   "MyQLMDigitalQPU": {"qpu_class_name":"CLinalg", "nbshots": *nbshots},
+  ]
   ]
 
 pipelines: [
