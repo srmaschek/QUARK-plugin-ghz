@@ -4,6 +4,8 @@ import numpy as np
 from quark.core import Core, Result, Data
 from quark.interface_types import Other
 
+from quark.interface_types.circuit import Circuit
+from quark.interface_types.quantum_result import SampleDistribution
 from sc.quark.qaptiva.qaptiva_qds import ProbabilityDistribution
 
 def hellinger(p1, p2):
@@ -45,3 +47,24 @@ class GHZ(Core):
         metrics["probabilities"] = self.result.prob_dict
         metrics["HD"] = self.hel
         return metrics
+
+
+@dataclass
+class QasmGHZCircuit(Core):
+    def preprocess(self, data):
+        n: dict = data.data.get("size")
+        header = f"""
+        OPENQASM 3.0;
+        qubit q[{n}];
+        bit c[{n}];
+        """
+        circuit = "h q[0];" + \
+            "\n".join([f"cx q[{i}],q[{i+1}];" for i in range(n-1)])
+        measurement = "\n".join(
+            [f"measure q[{i}] -> c[{i}];" for i in range(n)])
+
+        return Circuit(header + circuit + measurement)
+
+    def postprocess(self, data: SampleDistribution):
+        assert isinstance(data, SampleDistribution)
+        return Data(data)

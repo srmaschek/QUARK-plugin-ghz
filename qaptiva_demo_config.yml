@@ -1,0 +1,12 @@
+plugins: ["quark_plugin_ghz","quark_plugin_myqlm"]
+
+
+pipeline: &ghz_pipeline [
+  "GHZ": {"num_qubits": 3},
+  "QasmGHZCircuit",
+  "MyQLMDigitalSimulator":{n_shots: 100, observable: "ZZZ"}
+  ]
+
+pipelines: [
+  *ghz_pipeline
+  ]
