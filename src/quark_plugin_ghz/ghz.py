@@ -2,9 +2,8 @@ from dataclasses import dataclass
 import numpy as np
 
 from quark.core import Core, Result, Data
-from quark.interface_types import Other
+from quark.interface_types import Other, SampleDistribution
 
-from sc.quark.qaptiva.qaptiva_qds import ProbabilityDistribution
 
 def hellinger(p1, p2):
     assert len(p1) == len(p2)
@@ -29,12 +28,12 @@ class GHZ(Core):
     def preprocess(self, data):
         return Data(Other({"size": self.size}))
         
-    def postprocess(self, data:Other[ProbabilityDistribution]) -> Result:
-        assert isinstance(data, Other) and isinstance(data.data, ProbabilityDistribution)
-        self.result:ProbabilityDistribution = data.data
+    def postprocess(self, data:SampleDistribution) -> Result:
+        assert isinstance(data, SampleDistribution)
+        self.result:SampleDistribution = data
         p1 = [] 
         p2 = []
-        for state, prob in self.result.prob_dict.items():
+        for state, prob in self.result.as_list():
             p1.append(prob)
             p2.append(self.expected_prob(state))
         self.hel = hellinger(p1, p2)
@@ -42,6 +41,6 @@ class GHZ(Core):
 
     def get_metrics(self):
         metrics = super().get_metrics()
-        metrics["probabilities"] = self.result.prob_dict
+        metrics["probabilities"] = self.result.as_list()
         metrics["HD"] = self.hel
         return metrics

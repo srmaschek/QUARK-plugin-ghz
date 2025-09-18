@@ -18,4 +18,4 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 license = "Apache-2.0"
-dependencies = ["quark-framework>=0.3.7"]
+dependencies = ["quark-framework>=0.3.7", "numpy>=1.26.0"]
