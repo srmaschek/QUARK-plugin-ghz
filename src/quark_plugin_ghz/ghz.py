@@ -6,7 +6,6 @@ from quark.interface_types import Other, SampleDistribution
 
 from quark.interface_types.circuit import Circuit
 from quark.interface_types.quantum_result import SampleDistribution
-from sc.quark.qaptiva.qaptiva_qds import ProbabilityDistribution
 
 def hellinger(p1, p2):
     assert len(p1) == len(p2)
