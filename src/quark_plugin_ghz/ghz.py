@@ -69,10 +69,10 @@ class GHZ(Core):
 
 
 @dataclass
-class QasmGHZCircuit(Core):
+class GHZtoQasmCircuit(Core):
     measure: bool = False
 
-    def preprocess(self, data):
+    def preprocess(self, data:Other[dict]) -> Result:
         n: dict = data.data.get("size")
         header = f"""
         OPENQASM 3.0;

@@ -20,7 +20,7 @@
 
 from quark.plugin_manager import factory
 
-from quark_plugin_ghz.ghz import GHZ, QasmGHZCircuit
+from quark_plugin_ghz.ghz import GHZ, GHZtoQasmCircuit
 
 def register() -> None:
     """
@@ -31,4 +31,4 @@ def register() -> None:
     The "module_name" will later be used to refer to the module in the configuration file.
     """
     factory.register("GHZ", GHZ)
-    factory.register("QasmGHZCircuit", QasmGHZCircuit)
+    factory.register("GHZtoQasmCircuit", GHZtoQasmCircuit)
