@@ -71,15 +71,27 @@ class GHZ(Core):
 @dataclass
 class GHZtoQasmCircuit(Core):
     measure: bool = False
+    qasm_version: int = 3
+
+    def __post_init__(self):
+        qasm_versions_supported = (2,3)
+        assert self.qasm_version in qasm_versions_supported, f"qasm_version {self.qasm_version} is not supported. Supported values for 'qasm_version' are {qasm_versions_supported}"
 
     def preprocess(self, data:Other[dict]) -> Result:
         n: dict = data.data.get("size")
-        header = f"""
-        OPENQASM 3.0;
-        qubit q[{n}];
-        bit c[{n}];
-        """
-        circuit = "h q[0];" + \
+        if self.qasm_version == 2:
+            header = f"""OPENQASM 2.0;
+qreg q[{n}];
+creg c[{n}];
+include "stdgates.inc";
+"""
+        elif self.qasm_version == 3:
+            header = f"""OPENQASM 3.0;
+qubit[{n}] q;
+bit[{n}] c;
+include "stdgates.inc";
+"""
+        circuit = "h q[0];\n" + \
             "\n".join([f"cx q[{i}],q[{i+1}];" for i in range(n-1)])
         measurement = "" if not self.measure else "\n".join(
             [f"measure q[{i}] -> c[{i}];" for i in range(n)])
@@ -88,5 +100,5 @@ class GHZtoQasmCircuit(Core):
         return Data(Circuit(header + circuit + measurement))
 
     def postprocess(self, data: SampleDistribution):
-        assert isinstance(data, SampleDistribution)
+        assert isinstance(data, SampleDistribution), f"expected a SampleDistribution but got {type(data)}"
         return Data(data)
