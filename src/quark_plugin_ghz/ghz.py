@@ -100,5 +100,11 @@ include "stdgates.inc";
         return Data(Circuit(header + circuit + measurement))
 
     def postprocess(self, data: SampleDistribution):
+        if isinstance(data, Other):
+            # This is provisional code needed as long downstream modules are not adapted to use
+            # the SampleDistribution type.
+            nbshots = sum(data.data["counts"].values())
+            count_list = [(state,count) for state, count in data.data["counts"].items()]
+            data = SampleDistribution.from_list(count_list, nbshots=nbshots)
         assert isinstance(data, SampleDistribution), f"expected a SampleDistribution but got {type(data)}"
         return Data(data)
