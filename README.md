@@ -5,3 +5,10 @@ This QUARK plugin provides a QUARK-module ("GHZ") which in combination with some
 The mapping "QasmGHZCircuit" takes the preprocess output from GHZ and creates a circuit in the QASM format.
 
 QUARK-plugin-myqlm provides a mapping into some myqlm specific representation.
+
+## Provided Modules
+
+| Module               | Upstream Interface                | Downstream Interface         |
+| -------------------- |-----------------------------------| ---------------------------  |
+| GHZ                  |    None                           | Other(dict)                  |
+| GHZtoQasmCircuit     | Other(dict)                       | quark.interface_types.circuit|
